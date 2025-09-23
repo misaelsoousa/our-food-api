@@ -99,6 +99,7 @@ artifacts/
 # ASP.NET Core
 wwwroot/
 
+mysql-data/
 .vs/
 # End of template
 

@@ -3,10 +3,10 @@ using OurFood.Api.Entities;
 
 namespace OurFood.Api.Infrastructure;
 
-public class OurFoodDbContext: DbContext
+public class OurFoodDbContext(DbContextOptions<OurFoodDbContext> options) : DbContext(options)
 {
- public DbSet<Categoria> Categorias { get; set; }
-        public DbSet<Restaurante> Restaurantes { get; set; }
+    public DbSet<Categoria> Categorias { get; set; }
+    public DbSet<Restaurante> Restaurantes { get; set; }
     public DbSet<Produto> Produtos { get; set; }
     public DbSet<RestauranteProduto> RestaurantesProdutos { get; set; }
     public DbSet<Usuario> Usuarios { get; set; }

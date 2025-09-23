@@ -8,9 +8,10 @@ services:
       MYSQL_USER: ourfooduser
       MYSQL_PASSWORD: ourfoodpass
     ports:
-      - "3306:3306"
+      - "3293:3306"
     volumes:
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - mysql-data:/var/lib/mysql
 
   ourfood-api:
     build:
@@ -19,8 +20,12 @@ services:
     container_name: ourfood-api
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
-      - ConnectionStrings__Default=Server=mysql;Port=3306;Database=ourfooddb;User=ourfooduser;Password=ourfoodpass;
+      - ConnectionStrings__OurFoodDb=Server=mysql;Port=3306;Database=ourfooddb;User=ourfooduser;Password=ourfoodpass;
     ports:
-      - "80:80"
+      - "80:8080"
     depends_on:
       - mysql
+
+volumes:
+  mysql-data:
+    driver: local

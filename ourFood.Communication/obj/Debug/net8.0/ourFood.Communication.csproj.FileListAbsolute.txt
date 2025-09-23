@@ -1,0 +1,11 @@
+C:\Users\PC GAMER\Desktop\Projetos\C#\ourFood\ourFood.Communication\bin\Debug\net8.0\ourFood.Communication.deps.json
+C:\Users\PC GAMER\Desktop\Projetos\C#\ourFood\ourFood.Communication\bin\Debug\net8.0\ourFood.Communication.dll
+C:\Users\PC GAMER\Desktop\Projetos\C#\ourFood\ourFood.Communication\bin\Debug\net8.0\ourFood.Communication.pdb
+C:\Users\PC GAMER\Desktop\Projetos\C#\ourFood\ourFood.Communication\obj\Debug\net8.0\ourFood.Communication.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\PC GAMER\Desktop\Projetos\C#\ourFood\ourFood.Communication\obj\Debug\net8.0\ourFood.Communication.AssemblyInfoInputs.cache
+C:\Users\PC GAMER\Desktop\Projetos\C#\ourFood\ourFood.Communication\obj\Debug\net8.0\ourFood.Communication.AssemblyInfo.cs
+C:\Users\PC GAMER\Desktop\Projetos\C#\ourFood\ourFood.Communication\obj\Debug\net8.0\ourFood.Communication.csproj.CoreCompileInputs.cache
+C:\Users\PC GAMER\Desktop\Projetos\C#\ourFood\ourFood.Communication\obj\Debug\net8.0\ourFood.Communication.dll
+C:\Users\PC GAMER\Desktop\Projetos\C#\ourFood\ourFood.Communication\obj\Debug\net8.0\refint\ourFood.Communication.dll
+C:\Users\PC GAMER\Desktop\Projetos\C#\ourFood\ourFood.Communication\obj\Debug\net8.0\ourFood.Communication.pdb
+C:\Users\PC GAMER\Desktop\Projetos\C#\ourFood\ourFood.Communication\obj\Debug\net8.0\ref\ourFood.Communication.dll

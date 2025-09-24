@@ -19,3 +19,4 @@ public class DeleteCategoriaUseCase(OurFoodDbContext db) : IDeleteCategoriaUseCa
         return true;
     }
 }
+

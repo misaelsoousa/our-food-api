@@ -6,6 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <AssemblyName>OurFood.Api</AssemblyName>
     <RootNamespace>OurFood.Api</RootNamespace>
+    <UserSecretsId>0e7d6111-7213-4f8f-b121-52d4a69d5c59</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -23,6 +24,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.8" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.2.0" />
     <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
+    <PackageReference Include="AWSSDK.S3" Version="3.7.400.25" />
   </ItemGroup>
 
   <ItemGroup>

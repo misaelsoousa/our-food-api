@@ -19,3 +19,4 @@ public class DeleteProdutoUseCase(OurFoodDbContext db) : IDeleteProdutoUseCase
         return true;
     }
 }
+

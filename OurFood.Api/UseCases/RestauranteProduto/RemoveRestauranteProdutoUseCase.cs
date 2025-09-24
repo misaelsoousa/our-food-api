@@ -21,3 +21,4 @@ public class RemoveRestauranteProdutoUseCase(OurFoodDbContext db)
         return (true, null);
     }
 }
+

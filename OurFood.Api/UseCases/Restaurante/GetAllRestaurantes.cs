@@ -21,3 +21,4 @@ public class GetAllRestaurantes(OurFoodDbContext db) : IGetAllRestaurantes
         return new ResponseAllRestaurantes(Restaurantes:list);
     }
 }
+

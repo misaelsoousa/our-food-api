@@ -5,3 +5,4 @@ public record RequestAuth (
     string Nome,
     string Senha
 );
+

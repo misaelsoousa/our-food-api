@@ -32,3 +32,4 @@ public class RegisterUsuarioUseCase(OurFoodDbContext db) : IRegisterUsuarioUseCa
         return new ResponseAuth(Token: token);
     }
 }
+

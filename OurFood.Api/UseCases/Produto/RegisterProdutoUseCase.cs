@@ -31,6 +31,7 @@ public class RegisterProdutoUseCase(OurFoodDbContext db) : IRegisterProdutoUseCa
             Nome = request.Nome,
             Imagem = caminhoImagem,
             Preco = request.Preco,
+            Descricao = request.Descricao,
             CategoriaId = request.CategoriaId
         };
 
@@ -44,19 +45,38 @@ public class RegisterProdutoUseCase(OurFoodDbContext db) : IRegisterProdutoUseCa
             entity.Imagem,
             entity.Preco,
             categoria.Id,
+            entity.Descricao,
             categoria.Nome
         ), null);
     }
 
-    private string SalvarImagem(IFormFile file)
+    private string? SalvarImagem(IFormFile file)
     {
-        var pasta = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "imagens", "produtos");
-        if (!Directory.Exists(pasta)) Directory.CreateDirectory(pasta);
-        var extensao = Path.GetExtension(file.FileName);
-        var nomeArquivo = Guid.NewGuid() + extensao;
-        var caminho = Path.Combine(pasta, nomeArquivo);
-        using var stream = new FileStream(caminho, FileMode.Create);
-        file.CopyTo(stream);
-        return Path.Combine("imagens", "produtos", nomeArquivo).Replace("\\", "/");
+        try
+        {
+            var pasta = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "imagens", "produtos");
+            // Cria a pasta se não existir
+            if (!Directory.Exists(pasta)) Directory.CreateDirectory(pasta); 
+
+            var extensao = Path.GetExtension(file.FileName);
+            var nomeArquivo = Guid.NewGuid() + extensao;
+            var caminho = Path.Combine(pasta, nomeArquivo);
+
+            // Garante que o recurso de arquivo seja liberado após o uso
+            using (var stream = new FileStream(caminho, FileMode.Create))
+            {
+                file.CopyTo(stream);
+            }
+        
+            // Retorna o caminho relativo (com barras '/' para URL)
+            return Path.Combine("imagens", "produtos", nomeArquivo).Replace("\\", "/");
+        }
+        catch (Exception ex)
+        {
+            // Aqui, você deve logar a exceção 'ex' para debug
+            Console.WriteLine($"Erro ao salvar imagem: {ex.Message}");
+            // Retorna null ou lança uma exceção customizada para ser tratada no UseCase
+            throw new IOException("Falha ao salvar a imagem no disco. Verifique as permissões de pasta.", ex); 
+        }
     }
 }

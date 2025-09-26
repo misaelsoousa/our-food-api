@@ -11,7 +11,8 @@ namespace OurFood.Api.Controllers;
 public class ProdutosController(
     IGetAllProdutos getAllProdutos,
     IRegisterProdutoUseCase registerProdutoUseCase,
-    IDeleteProdutoUseCase deleteProdutoUseCase)
+    IDeleteProdutoUseCase deleteProdutoUseCase,
+    IGetByIdUseCase getByIdUseCase)
     : ControllerBase
 {
     [HttpGet]
@@ -23,7 +24,21 @@ public class ProdutosController(
         if (response.Produtos.Count == 0) return NoContent();
         return Ok(response);
     }
+    
+    [HttpGet("{id}")]
+    [ProducesResponseType(typeof(ResponseProduto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public IActionResult GetById(int id)
+    {
+        var response = getByIdUseCase.Execute(id);
 
+        if (response is null)
+        {
+            return NotFound(); 
+        }
+
+        return Ok(response);
+    }
     [HttpPost]
     [ProducesResponseType(typeof(ResponseProduto), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]

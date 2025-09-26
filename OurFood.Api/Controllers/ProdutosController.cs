@@ -12,7 +12,8 @@ public class ProdutosController(
     IGetAllProdutos getAllProdutos,
     IRegisterProdutoUseCase registerProdutoUseCase,
     IDeleteProdutoUseCase deleteProdutoUseCase,
-    IGetByIdUseCase getByIdUseCase)
+    IGetByIdUseCase getByIdUseCase,
+    IToggleFavoritoUseCase ToggleFavoritoUseCase)
     : ControllerBase
 {
     [HttpGet]
@@ -56,6 +57,26 @@ public class ProdutosController(
     {
         var ok = deleteProdutoUseCase.Execute(id);
         if (!ok) return BadRequest("Produto não encontrado");
+        return NoContent();
+    }
+    
+    [HttpPatch("{id}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public IActionResult Favoritar(int id)
+    {
+        var (success, error) = ToggleFavoritoUseCase.Execute(id);
+
+        if (!success && error == "Produto não encontrado.")
+        {
+            return NotFound(); // Retorna 404 se não achar o produto
+        }
+    
+        if (!success)
+        {
+            return BadRequest(error); // Retorna 400 para outros erros
+        }
+
         return NoContent();
     }
 }

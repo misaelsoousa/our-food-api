@@ -23,6 +23,7 @@ public static class DependencyInjection
         services.AddScoped<IRegisterProdutoUseCase, RegisterProdutoUseCase>();
         services.AddScoped<IDeleteProdutoUseCase, DeleteProdutoUseCase>();
         services.AddScoped<IGetByIdUseCase, GetByIdUseCase>();
+        services.AddScoped<IToggleFavoritoUseCase, ToggleFavoritoUseCase>();
         // Restaurante
         services.AddScoped<IGetAllRestaurantes, GetAllRestaurantes>();
         services.AddScoped<IRegisterRestauranteUseCase, RegisterRestauranteUseCase>();

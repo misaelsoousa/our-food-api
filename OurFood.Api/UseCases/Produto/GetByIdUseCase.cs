@@ -23,7 +23,8 @@ public class GetByIdUseCase(OurFoodDbContext db) : IGetByIdUseCase
                 p.Preco,
                 p.CategoriaId ?? 0,
                 p.Categoria.Nome,
-                p.Descricao
+                p.Descricao,
+                p.Favorito
             ))
             .FirstOrDefault(); // Retorna o objeto ResponseProduto ou null
 

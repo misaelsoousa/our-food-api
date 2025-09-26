@@ -32,7 +32,9 @@ public class RegisterProdutoUseCase(OurFoodDbContext db) : IRegisterProdutoUseCa
             Imagem = caminhoImagem,
             Preco = request.Preco,
             Descricao = request.Descricao,
-            CategoriaId = request.CategoriaId
+            Favorito = false,
+            CategoriaId = request.CategoriaId,
+            
         };
 
         db.Produtos.Add(entity);
@@ -46,7 +48,8 @@ public class RegisterProdutoUseCase(OurFoodDbContext db) : IRegisterProdutoUseCa
             entity.Preco,
             categoria.Id,
             entity.Descricao,
-            categoria.Nome
+            categoria.Nome,
+            false
         ), null);
     }
 

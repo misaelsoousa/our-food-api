@@ -30,10 +30,8 @@ public class GetRestauranteDetalhe(OurFoodDbContext db) : IGetRestauranteDetalhe
             p.Imagem,
             p.Preco,
             p.CategoriaId ?? 0,
-            p.Descricao,
-            p.Categoria.Nome,
-            p.Favorito
-            
+            p.Categoria.Nome ?? string.Empty,
+            p.Descricao ?? string.Empty
         )).ToList();
 
         var resp = new ResponseRestauranteDetalhe(

@@ -21,7 +21,7 @@ public class RegisterUsuarioUseCase(OurFoodDbContext db) : IRegisterUsuarioUseCa
         {
             throw new Exception("Email já registrado");
         }
-        var usuario = new Usuario
+        var usuario = new Entities.Usuario
         {
             Email = request.Email,
             Nome = request.Nome,
@@ -32,6 +32,7 @@ public class RegisterUsuarioUseCase(OurFoodDbContext db) : IRegisterUsuarioUseCa
         return new ResponseAuth(Token: token);
     }
 }
+
 
 
 

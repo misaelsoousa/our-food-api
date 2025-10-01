@@ -21,10 +21,8 @@ public class GetAllProdutos(OurFoodDbContext db) : IGetAllProdutos
             p.Imagem,
             p.Preco,
             p.CategoriaId ?? 0,
-            p.Categoria.Nome,
-            p.Descricao,
-            p.Favorito
-           
+            p.Categoria.Nome ?? string.Empty,
+            p.Descricao ?? string.Empty
         )).ToList();
         
         return new ResponseAllProdutos(Produtos: list);

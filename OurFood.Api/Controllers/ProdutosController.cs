@@ -13,7 +13,8 @@ public class ProdutosController(
     IRegisterProdutoUseCase registerProdutoUseCase,
     IDeleteProdutoUseCase deleteProdutoUseCase,
     IGetByIdUseCase getByIdUseCase,
-    IToggleFavoritoUseCase ToggleFavoritoUseCase)
+    IToggleFavoritoUseCase ToggleFavoritoUseCase,
+    IGetFavoritosUseCase getFavoritosUseCase)
     : ControllerBase
 {
     [HttpGet]
@@ -60,23 +61,78 @@ public class ProdutosController(
         return NoContent();
     }
     
-    [HttpPatch("{id}")]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [HttpPatch("{id}/favoritar")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public IActionResult Favoritar(int id)
     {
-        var (success, error) = ToggleFavoritoUseCase.Execute(id);
-
-        if (!success && error == "Produto não encontrado.")
+        try
         {
-            return NotFound(); // Retorna 404 se não achar o produto
-        }
-    
-        if (!success)
-        {
-            return BadRequest(error); // Retorna 400 para outros erros
-        }
+            string authorizationHeader = Request.Headers["Authorization"].FirstOrDefault() ?? string.Empty;
 
-        return NoContent();
+            if (string.IsNullOrEmpty(authorizationHeader) || !authorizationHeader.StartsWith("Bearer "))
+            {
+                return Unauthorized("Token de autorização não fornecido ou formato inválido");
+            }
+
+            string jwt = authorizationHeader.Substring("Bearer ".Length).Trim();
+
+            if (string.IsNullOrEmpty(jwt))
+            {
+                return Unauthorized("Token JWT não fornecido");
+            }
+
+            var (success, error, isFavorito) = ToggleFavoritoUseCase.Execute(id, jwt);
+
+            if (!success && error == "Produto não encontrado.")
+            {
+                return NotFound(); // Retorna 404 se não achar o produto
+            }
+        
+            if (!success)
+            {
+                return BadRequest(error); // Retorna 400 para outros erros
+            }
+
+            return Ok(new { favoritado = isFavorito });
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
+    [HttpGet("favoritos")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    public IActionResult GetFavoritos()
+    {
+        try
+        {
+            string authorizationHeader = Request.Headers["Authorization"].FirstOrDefault() ?? string.Empty;
+
+            if (string.IsNullOrEmpty(authorizationHeader) || !authorizationHeader.StartsWith("Bearer "))
+            {
+                return Unauthorized("Token de autorização não fornecido ou formato inválido");
+            }
+
+            string jwt = authorizationHeader.Substring("Bearer ".Length).Trim();
+
+            if (string.IsNullOrEmpty(jwt))
+            {
+                return Unauthorized("Token JWT não fornecido");
+            }
+
+            var response = getFavoritosUseCase.Execute(jwt);
+            if (response.Produtos.Count == 0) return NoContent();
+            return Ok(response);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
     }
 }

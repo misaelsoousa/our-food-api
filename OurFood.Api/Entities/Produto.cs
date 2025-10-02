@@ -11,6 +11,8 @@ public class Produto
 	public decimal Preco { get; set; }
 	public int? CategoriaId { get; set; }
 	public Categoria Categoria { get; set; } = null!;
+	public int RestauranteId { get; set; }
+	public Restaurante Restaurante { get; set; } = null!;
 
 	public ICollection<RestauranteProduto> RestauranteProdutos { get; set; } = new List<RestauranteProduto>();
 }

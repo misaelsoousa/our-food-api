@@ -20,6 +20,9 @@ public class RegisterProdutoUseCase(OurFoodDbContext db) : IRegisterProdutoUseCa
         var categoria = db.Categorias.FirstOrDefault(c => c.Id == request.CategoriaId);
         if (categoria == null) return (null, "Categoria não encontrada");
 
+        var restaurante = db.Restaurantes.FirstOrDefault(r => r.Id == request.RestauranteId);
+        if (restaurante == null) return (null, "Restaurante não encontrado");
+
         string? caminhoImagem = null;
         if (imagemFile != null && imagemFile.Length > 0)
         {
@@ -33,7 +36,7 @@ public class RegisterProdutoUseCase(OurFoodDbContext db) : IRegisterProdutoUseCa
             Preco = request.Preco,
             Descricao = request.Descricao,
             CategoriaId = request.CategoriaId,
-            
+            RestauranteId = request.RestauranteId
         };
 
         db.Produtos.Add(entity);
@@ -47,7 +50,9 @@ public class RegisterProdutoUseCase(OurFoodDbContext db) : IRegisterProdutoUseCa
             entity.Preco,
             categoria.Id,
             categoria.Nome ?? string.Empty,
-            entity.Descricao ?? string.Empty
+            entity.Descricao ?? string.Empty,
+            restaurante.Id,
+            restaurante.Nome
         ), null);
     }
 

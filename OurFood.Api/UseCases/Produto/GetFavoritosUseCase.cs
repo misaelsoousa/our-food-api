@@ -20,6 +20,8 @@ public class GetFavoritosUseCase(OurFoodDbContext db, IJwtService jwtService) : 
             .Where(pf => pf.UsuarioId == userId)
             .Include(pf => pf.Produto)
             .ThenInclude(p => p.Categoria)
+            .Include(pf => pf.Produto)
+            .ThenInclude(p => p.Restaurante)
             .Select(pf => pf.Produto)
             .ToList();
 
@@ -30,7 +32,9 @@ public class GetFavoritosUseCase(OurFoodDbContext db, IJwtService jwtService) : 
             p.Preco,
             p.CategoriaId ?? 0,
             p.Categoria.Nome ?? string.Empty,
-            p.Descricao ?? string.Empty
+            p.Descricao ?? string.Empty,
+            p.RestauranteId,
+            p.Restaurante.Nome
         )).ToList();
 
         return new ResponseAllProdutos(Produtos: produtosList);

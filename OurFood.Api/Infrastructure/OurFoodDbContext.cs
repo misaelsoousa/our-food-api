@@ -59,9 +59,16 @@ public class OurFoodDbContext(DbContextOptions<OurFoodDbContext> options) : DbCo
             entity.Property(p => p.Descricao).HasColumnName("descricao");
             entity.Property(p => p.Preco).HasColumnName("preco");
             entity.Property(p => p.CategoriaId).HasColumnName("categoria_id");
+            entity.Property(p => p.RestauranteId).HasColumnName("restaurante_id").IsRequired();
+            
             entity.HasOne(p => p.Categoria)
                 .WithMany()
                 .HasForeignKey(p => p.CategoriaId)
+                .OnDelete(DeleteBehavior.Restrict);
+                
+            entity.HasOne(p => p.Restaurante)
+                .WithMany()
+                .HasForeignKey(p => p.RestauranteId)
                 .OnDelete(DeleteBehavior.Restrict);
         });
 

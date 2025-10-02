@@ -21,6 +21,8 @@ public class GetRestauranteDetalhe(OurFoodDbContext db) : IGetRestauranteDetalhe
             .Where(rp => rp.RestauranteId == restauranteId)
             .Include(rp => rp.Produto)
             .ThenInclude(p => p.Categoria)
+            .Include(rp => rp.Produto)
+            .ThenInclude(p => p.Restaurante)
             .Select(rp => rp.Produto)
             .ToList();
 
@@ -31,7 +33,9 @@ public class GetRestauranteDetalhe(OurFoodDbContext db) : IGetRestauranteDetalhe
             p.Preco,
             p.CategoriaId ?? 0,
             p.Categoria.Nome ?? string.Empty,
-            p.Descricao ?? string.Empty
+            p.Descricao ?? string.Empty,
+            p.RestauranteId,
+            p.Restaurante.Nome
         )).ToList();
 
         var resp = new ResponseRestauranteDetalhe(

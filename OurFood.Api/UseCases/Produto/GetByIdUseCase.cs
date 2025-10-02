@@ -14,6 +14,7 @@ public class GetByIdUseCase(OurFoodDbContext db) : IGetByIdUseCase
     {
         var produto = db.Produtos
             .Include(p => p.Categoria)
+            .Include(p => p.Restaurante)
             .Where(p => p.Id == id)
             .Select(p => new ResponseProduto
             (
@@ -23,7 +24,9 @@ public class GetByIdUseCase(OurFoodDbContext db) : IGetByIdUseCase
                 p.Preco,
                 p.CategoriaId ?? 0,
                 p.Categoria.Nome ?? string.Empty,
-                p.Descricao ?? string.Empty
+                p.Descricao ?? string.Empty,
+                p.RestauranteId,
+                p.Restaurante.Nome
             ))
             .FirstOrDefault(); // Retorna o objeto ResponseProduto ou null
 

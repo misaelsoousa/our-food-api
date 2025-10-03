@@ -12,25 +12,34 @@ public class GetByIdUseCase(OurFoodDbContext db) : IGetByIdUseCase
 {
     public ResponseProduto Execute(int id)
     {
-        var produto = db.Produtos
-            .Include(p => p.Categoria)
-            .Include(p => p.Restaurante)
-            .Where(p => p.Id == id)
-            .Select(p => new ResponseProduto
-            (
-                p.Id,
-                p.Nome,
-                p.Imagem,
-                p.Preco,
-                p.CategoriaId ?? 0,
-                p.Categoria.Nome ?? string.Empty,
-                p.Descricao ?? string.Empty,
-                p.RestauranteId,
-                p.Restaurante.Nome
-            ))
-            .FirstOrDefault(); // Retorna o objeto ResponseProduto ou null
+        try
+        {
+            var produto = db.Produtos
+                .Include(p => p.Categoria)
+                .Include(p => p.Restaurante)
+                .Where(p => p.Id == id)
+                .Select(p => new ResponseProduto
+                (
+                    p.Id,
+                    p.Nome,
+                    p.Imagem,
+                    p.Preco,
+                    p.CategoriaId ?? 0,
+                    p.Categoria.Nome ?? string.Empty,
+                    p.Descricao ?? string.Empty,
+                    p.RestauranteId,
+                    p.Restaurante.Nome
+                ))
+                .FirstOrDefault(); // Retorna o objeto ResponseProduto ou null
 
-        // Retorna o ResponseProduto encontrado (pode ser null)
-        return produto;
+            // Retorna o ResponseProduto encontrado (pode ser null)
+            return produto;
+        }
+        catch (Exception ex)
+        {
+            // Log do erro para debug
+            Console.WriteLine($"Erro ao buscar produto por ID: {ex.Message}");
+            return null;
+        }
     }
 }

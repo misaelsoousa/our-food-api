@@ -11,6 +11,7 @@ namespace OurFood.Api.Controllers;
 public class ProdutosController(
     IGetAllProdutos getAllProdutos,
     IRegisterProdutoUseCase registerProdutoUseCase,
+    IUpdateProdutoUseCase updateProdutoUseCase,
     IDeleteProdutoUseCase deleteProdutoUseCase,
     IGetByIdUseCase getByIdUseCase,
     IToggleFavoritoUseCase ToggleFavoritoUseCase,
@@ -49,6 +50,18 @@ public class ProdutosController(
         var (response, error) = registerProdutoUseCase.Execute(request, imagem);
         if (error != null) return BadRequest(error);
         return Created(string.Empty, response);
+    }
+
+    [HttpPut("{id}")]
+    [ProducesResponseType(typeof(ResponseProduto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public IActionResult Update(int id, [FromForm] RequestUpdateProduto request, IFormFile? imagem)
+    {
+        var (response, error) = updateProdutoUseCase.Execute(id, request, imagem);
+        if (error != null) return BadRequest(error);
+        if (response == null) return NotFound("Produto não encontrado");
+        return Ok(response);
     }
 
     [HttpDelete("{id}")]

@@ -14,22 +14,31 @@ public class GetAllProdutos(OurFoodDbContext db) : IGetAllProdutos
 {
     public ResponseAllProdutos Execute()
     {
-        var list = db.Produtos
-            .Include(p => p.Categoria)
-            .Include(p => p.Restaurante)
-            .Select(p => new ResponseProduto
-            (
-                p.Id,
-                p.Nome,
-                p.Imagem,
-                p.Preco,
-                p.CategoriaId ?? 0,
-                p.Categoria.Nome ?? string.Empty,
-                p.Descricao ?? string.Empty,
-                p.RestauranteId,
-                p.Restaurante.Nome
-            )).ToList();
-        
-        return new ResponseAllProdutos(Produtos: list);
+        try
+        {
+            var list = db.Produtos
+                .Include(p => p.Categoria)
+                .Include(p => p.Restaurante)
+                .Select(p => new ResponseProduto
+                (
+                    p.Id,
+                    p.Nome,
+                    p.Imagem,
+                    p.Preco,
+                    p.CategoriaId ?? 0,
+                    p.Categoria.Nome ?? string.Empty,
+                    p.Descricao ?? string.Empty,
+                    p.RestauranteId,
+                    p.Restaurante.Nome
+                )).ToList();
+            
+            return new ResponseAllProdutos(Produtos: list);
+        }
+        catch (Exception ex)
+        {
+            // Log do erro para debug
+            Console.WriteLine($"Erro ao buscar produtos: {ex.Message}");
+            return new ResponseAllProdutos(Produtos: new List<ResponseProduto>());
+        }
     }
 }

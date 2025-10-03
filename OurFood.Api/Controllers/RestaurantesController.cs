@@ -11,6 +11,7 @@ namespace OurFood.Api.Controllers;
 public class RestaurantesController(
     IGetAllRestaurantes getAllRestaurantes,
     IRegisterRestauranteUseCase registerRestauranteUseCase,
+    IUpdateRestauranteUseCase updateRestauranteUseCase,
     IDeleteRestauranteUseCase deleteRestauranteUseCase,
     IGetRestauranteDetalhe getRestauranteDetalhe)
     : ControllerBase
@@ -32,6 +33,18 @@ public class RestaurantesController(
     {
         var response = registerRestauranteUseCase.Execute(request, imagem);
         return Created(string.Empty, response);
+    }
+
+    [HttpPut("{id}")]
+    [ProducesResponseType(typeof(ResponseRestaurante), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public IActionResult Update(int id, [FromForm] RequestUpdateRestaurante request, IFormFile? imagem)
+    {
+        var (response, error) = updateRestauranteUseCase.Execute(id, request, imagem);
+        if (error != null) return BadRequest(error);
+        if (response == null) return NotFound("Restaurante não encontrado");
+        return Ok(response);
     }
 
     [HttpDelete("{id}")]

@@ -11,6 +11,7 @@ public class PedidosController(
     ICriarPedidoUseCase criarPedido,
     IGetPedidosUsuarioUseCase getPedidosUsuario,
     IGetPedidoDetalheUseCase getPedidoDetalhe,
+    IUpdatePedidoUseCase updatePedido,
     IUpdatePedidoStatusUseCase updatePedidoStatus,
     IAvaliarPedidoUseCase avaliarPedido
 ) : ControllerBase
@@ -128,6 +129,40 @@ public class PedidosController(
             }
 
             return Ok(new { message = "Status do pedido atualizado com sucesso." });
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
+    [HttpPut("{id}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public IActionResult UpdatePedido(int id, [FromBody] RequestUpdatePedido request)
+    {
+        try
+        {
+            string authorizationHeader = Request.Headers["Authorization"].FirstOrDefault() ?? string.Empty;
+
+            if (string.IsNullOrEmpty(authorizationHeader) || !authorizationHeader.StartsWith("Bearer "))
+            {
+                return Unauthorized("Token de autorização não fornecido ou formato inválido");
+            }
+
+            string jwt = authorizationHeader.Substring("Bearer ".Length).Trim();
+
+            if (string.IsNullOrEmpty(jwt))
+            {
+                return Unauthorized("Token JWT não fornecido");
+            }
+
+            var (response, error) = updatePedido.Execute(id, request);
+            if (error != null) return BadRequest(error);
+            if (response == null) return NotFound("Pedido não encontrado");
+            return Ok(response);
         }
         catch (Exception ex)
         {

@@ -14,29 +14,38 @@ public class GetFavoritosUseCase(OurFoodDbContext db, IJwtService jwtService) : 
 {
     public ResponseAllProdutos Execute(string token)
     {
-        var userId = jwtService.GetUserIdFromToken(token);
+        try
+        {
+            var userId = jwtService.GetUserIdFromToken(token);
 
-        var produtosFavoritos = db.ProdutoFavoritos
-            .Where(pf => pf.UsuarioId == userId)
-            .Include(pf => pf.Produto)
-            .ThenInclude(p => p.Categoria)
-            .Include(pf => pf.Produto)
-            .ThenInclude(p => p.Restaurante)
-            .Select(pf => pf.Produto)
-            .ToList();
+            var produtosFavoritos = db.ProdutoFavoritos
+                .Where(pf => pf.UsuarioId == userId)
+                .Include(pf => pf.Produto)
+                .ThenInclude(p => p.Categoria)
+                .Include(pf => pf.Produto)
+                .ThenInclude(p => p.Restaurante)
+                .Select(pf => pf.Produto)
+                .ToList();
 
-        var produtosList = produtosFavoritos.Select(p => new ResponseProduto(
-            p.Id,
-            p.Nome,
-            p.Imagem,
-            p.Preco,
-            p.CategoriaId ?? 0,
-            p.Categoria.Nome ?? string.Empty,
-            p.Descricao ?? string.Empty,
-            p.RestauranteId,
-            p.Restaurante.Nome
-        )).ToList();
+            var produtosList = produtosFavoritos.Select(p => new ResponseProduto(
+                p.Id,
+                p.Nome,
+                p.Imagem,
+                p.Preco,
+                p.CategoriaId ?? 0,
+                p.Categoria.Nome ?? string.Empty,
+                p.Descricao ?? string.Empty,
+                p.RestauranteId,
+                p.Restaurante.Nome
+            )).ToList();
 
-        return new ResponseAllProdutos(Produtos: produtosList);
+            return new ResponseAllProdutos(Produtos: produtosList);
+        }
+        catch (Exception ex)
+        {
+            // Log do erro para debug
+            Console.WriteLine($"Erro ao buscar favoritos: {ex.Message}");
+            return new ResponseAllProdutos(Produtos: new List<ResponseProduto>());
+        }
     }
 }

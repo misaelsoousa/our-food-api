@@ -10,6 +10,7 @@ namespace OurFood.Api.Controllers;
 public class CategoriaController(
     IGetAllCategorias getAllCategorias,
     IRegisterCategoriaUseCase registerCategoriaUseCase,
+    IUpdateCategoriaUseCase updateCategoriaUseCase,
     IDeleteCategoriaUseCase deleteCategoriaUseCase)
     : ControllerBase
 {
@@ -34,6 +35,18 @@ public class CategoriaController(
         if (imagem == null) return BadRequest("Imagem obrigatória");
         var response = registerCategoriaUseCase.Execute(request, imagem);
         return Created(string.Empty, response);
+    }
+
+    [HttpPut("{id}")]
+    [ProducesResponseType(typeof(ResponseCategoria), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public IActionResult Update(int id, [FromForm] RequestUpdateCategoria request, IFormFile? imagem)
+    {
+        var (response, error) = updateCategoriaUseCase.Execute(id, request, imagem);
+        if (error != null) return BadRequest(error);
+        if (response == null) return NotFound("Categoria não encontrada");
+        return Ok(response);
     }
 
     [HttpDelete("{id}")]

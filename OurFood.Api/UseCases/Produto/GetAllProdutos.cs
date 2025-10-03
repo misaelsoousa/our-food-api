@@ -1,6 +1,7 @@
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using OurFood.Api.Infrastructure;
+using OurFood.Api.Services;
 using OurFood.Communication.Responses;
 
 namespace OurFood.Api.UseCases.Produto;
@@ -10,7 +11,7 @@ public interface IGetAllProdutos
     ResponseAllProdutos Execute();
 }
 
-public class GetAllProdutos(OurFoodDbContext db) : IGetAllProdutos
+public class GetAllProdutos(OurFoodDbContext db, IS3Service s3Service) : IGetAllProdutos
 {
     public ResponseAllProdutos Execute()
     {
@@ -23,7 +24,7 @@ public class GetAllProdutos(OurFoodDbContext db) : IGetAllProdutos
                 (
                     p.Id,
                     p.Nome,
-                    p.Imagem,
+                    !string.IsNullOrEmpty(p.Imagem) ? s3Service.GetFileUrl(p.Imagem) : p.Imagem,
                     p.Preco,
                     p.CategoriaId ?? 0,
                     p.Categoria.Nome ?? string.Empty,

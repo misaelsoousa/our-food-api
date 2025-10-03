@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using OurFood.Api.Infrastructure;
+using OurFood.Api.Services;
 using OurFood.Communication.Responses;
 
 namespace OurFood.Api.UseCases.Produto;
@@ -8,7 +9,7 @@ public interface IGetByIdUseCase
 {
     ResponseProduto Execute(int id);
 }
-public class GetByIdUseCase(OurFoodDbContext db) : IGetByIdUseCase
+public class GetByIdUseCase(OurFoodDbContext db, IS3Service s3Service) : IGetByIdUseCase
 {
     public ResponseProduto Execute(int id)
     {
@@ -22,7 +23,7 @@ public class GetByIdUseCase(OurFoodDbContext db) : IGetByIdUseCase
                 (
                     p.Id,
                     p.Nome,
-                    p.Imagem,
+                    !string.IsNullOrEmpty(p.Imagem) ? s3Service.GetFileUrl(p.Imagem) : p.Imagem,
                     p.Preco,
                     p.CategoriaId ?? 0,
                     p.Categoria.Nome ?? string.Empty,

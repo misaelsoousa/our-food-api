@@ -94,6 +94,8 @@ builder.Services.AddSingleton<IAmazonS3>(provider =>
 
 builder.Services.AddScoped<IS3Service, S3Service>();
 
+builder.Services.AddScoped<MigrateWwwrootToS3Command>();
+
 builder.Services.AddUseCases();
 
 

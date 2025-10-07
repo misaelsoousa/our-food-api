@@ -30,6 +30,7 @@ obj/
 appsettings.Production.json
 appsettings.Development.json
 **/appsettings.Development.json
+**/OurFood.Api/appsettings.Development.json
 
 # AWS credentials
 *.pem

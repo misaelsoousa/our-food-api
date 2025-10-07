@@ -11,6 +11,7 @@ public class CategoriaController(
     IGetAllCategorias getAllCategorias,
     IRegisterCategoriaUseCase registerCategoriaUseCase,
     IUpdateCategoriaUseCase updateCategoriaUseCase,
+    IUpdateCategoriaImagemUseCase updateCategoriaImagemUseCase,
     IDeleteCategoriaUseCase deleteCategoriaUseCase)
     : ControllerBase
 {
@@ -57,5 +58,26 @@ public class CategoriaController(
         var ok = deleteCategoriaUseCase.Execute(id);
         if (!ok) return BadRequest("Categoria não encontrada");
         return NoContent();
+    }
+
+    [HttpPatch("{id}/imagem")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> UpdateImagem(int id, IFormFile imagem)
+    {
+        if (imagem == null || imagem.Length == 0)
+            return BadRequest("Imagem é obrigatória");
+
+        var (success, error, imageUrl) = await updateCategoriaImagemUseCase.Execute(id, imagem);
+        
+        if (!success)
+        {
+            if (error == "Categoria não encontrada")
+                return NotFound(error);
+            return BadRequest(error);
+        }
+
+        return Ok(new { imageUrl });
     }
 }

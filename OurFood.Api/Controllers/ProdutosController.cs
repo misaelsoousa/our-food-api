@@ -12,6 +12,7 @@ public class ProdutosController(
     IGetAllProdutos getAllProdutos,
     IRegisterProdutoUseCase registerProdutoUseCase,
     IUpdateProdutoUseCase updateProdutoUseCase,
+    IUpdateProdutoImagemUseCase updateProdutoImagemUseCase,
     IDeleteProdutoUseCase deleteProdutoUseCase,
     IGetByIdUseCase getByIdUseCase,
     IToggleFavoritoUseCase ToggleFavoritoUseCase,
@@ -147,5 +148,26 @@ public class ProdutosController(
         {
             return BadRequest(ex.Message);
         }
+    }
+
+    [HttpPatch("{id}/imagem")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> UpdateImagem(int id, IFormFile imagem)
+    {
+        if (imagem == null || imagem.Length == 0)
+            return BadRequest("Imagem é obrigatória");
+
+        var (success, error, imageUrl) = await updateProdutoImagemUseCase.Execute(id, imagem);
+        
+        if (!success)
+        {
+            if (error == "Produto não encontrado")
+                return NotFound(error);
+            return BadRequest(error);
+        }
+
+        return Ok(new { imageUrl });
     }
 }

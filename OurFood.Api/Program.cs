@@ -13,7 +13,6 @@ using OurFood.Api.Infrastructure;
 using Amazon.S3;
 
 using OurFood.Api.Services;
-using OurFood.Api.Commands;
 
 
 
@@ -93,8 +92,6 @@ builder.Services.AddSingleton<IAmazonS3>(provider =>
 });
 
 builder.Services.AddScoped<IS3Service, S3Service>();
-
-builder.Services.AddScoped<MigrateWwwrootToS3Command>();
 
 builder.Services.AddUseCases();
 
@@ -185,19 +182,5 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-
-// Verificar se deve executar migração de imagens
-var commandLineArgs = Environment.GetCommandLineArgs();
-if (commandLineArgs.Contains("--migrate-images"))
-{
-    using var scope = app.Services.CreateScope();
-    var migrateCommand = new MigrateImagesCommand(
-        scope.ServiceProvider.GetRequiredService<OurFoodDbContext>(),
-        scope.ServiceProvider.GetRequiredService<IS3Service>()
-    );
-    
-    await migrateCommand.ExecuteAsync();
-    return;
-}
 
 app.Run();

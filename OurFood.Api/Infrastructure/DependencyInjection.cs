@@ -21,11 +21,13 @@ public static class DependencyInjection
         services.AddScoped<IGetAllCategorias, GetAllCategorias>();
         services.AddScoped<IRegisterCategoriaUseCase, RegisterCategoriaUseCase>();
         services.AddScoped<IUpdateCategoriaUseCase, UpdateCategoriaUseCase>();
+        services.AddScoped<IUpdateCategoriaImagemUseCase, UpdateCategoriaImagemUseCase>();
         services.AddScoped<IDeleteCategoriaUseCase, DeleteCategoriaUseCase>();
         // Produto
         services.AddScoped<IGetAllProdutos, GetAllProdutos>();
         services.AddScoped<IRegisterProdutoUseCase, RegisterProdutoUseCase>();
         services.AddScoped<IUpdateProdutoUseCase, UpdateProdutoUseCase>();
+        services.AddScoped<IUpdateProdutoImagemUseCase, UpdateProdutoImagemUseCase>();
         services.AddScoped<IDeleteProdutoUseCase, DeleteProdutoUseCase>();
         services.AddScoped<IGetByIdUseCase, GetByIdUseCase>();
         services.AddScoped<IToggleFavoritoUseCase, ToggleFavoritoUseCase>();
@@ -34,6 +36,7 @@ public static class DependencyInjection
         services.AddScoped<IGetAllRestaurantes, GetAllRestaurantes>();
         services.AddScoped<IRegisterRestauranteUseCase, RegisterRestauranteUseCase>();
         services.AddScoped<IUpdateRestauranteUseCase, UpdateRestauranteUseCase>();
+        services.AddScoped<IUpdateRestauranteImagemUseCase, UpdateRestauranteImagemUseCase>();
         services.AddScoped<IDeleteRestauranteUseCase, DeleteRestauranteUseCase>();
         services.AddScoped<IGetRestauranteDetalhe, GetRestauranteDetalhe>();
         // RestauranteProduto

@@ -1,6 +1,7 @@
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using OurFood.Api.Infrastructure;
+using OurFood.Api.Services;
 using OurFood.Communication.Responses;
 
 namespace OurFood.Api.UseCases.Restaurante;
@@ -10,7 +11,7 @@ public interface IGetRestauranteDetalhe
     (ResponseRestauranteDetalhe? response, string? error) Execute(int restauranteId);
 }
 
-public class GetRestauranteDetalhe(OurFoodDbContext db) : IGetRestauranteDetalhe
+public class GetRestauranteDetalhe(OurFoodDbContext db, IS3Service s3Service) : IGetRestauranteDetalhe
 {
     public (ResponseRestauranteDetalhe? response, string? error) Execute(int restauranteId)
     {
@@ -29,7 +30,7 @@ public class GetRestauranteDetalhe(OurFoodDbContext db) : IGetRestauranteDetalhe
         var produtosList = produtos.Select(p => new ResponseProduto(
             p.Id,
             p.Nome,
-            p.Imagem,
+            !string.IsNullOrEmpty(p.Imagem) ? s3Service.GetFileUrl(p.Imagem) : p.Imagem,
             p.Preco,
             p.CategoriaId ?? 0,
             p.Categoria.Nome ?? string.Empty,
@@ -41,7 +42,7 @@ public class GetRestauranteDetalhe(OurFoodDbContext db) : IGetRestauranteDetalhe
         var resp = new ResponseRestauranteDetalhe(
             restaurante.Id,
             restaurante.Nome,
-            restaurante.Imagem,
+            !string.IsNullOrEmpty(restaurante.Imagem) ? s3Service.GetFileUrl(restaurante.Imagem) : restaurante.Imagem,
             produtosList
         );
 

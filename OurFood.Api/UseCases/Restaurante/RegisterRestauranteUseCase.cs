@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using Microsoft.AspNetCore.Http;
 using OurFood.Api.Infrastructure;
+using OurFood.Api.Services;
 using OurFood.Communication.Requests;
 using OurFood.Communication.Responses;
 
@@ -9,17 +10,17 @@ namespace OurFood.Api.UseCases.Restaurante;
 
 public interface IRegisterRestauranteUseCase
 {
-    ResponseRestaurante Execute(RequestRestaurante request, IFormFile? imagemFile);
+    Task<ResponseRestaurante> Execute(RequestRestaurante request, IFormFile? imagemFile);
 }
 
-public class RegisterRestauranteUseCase(OurFoodDbContext db) : IRegisterRestauranteUseCase
+public class RegisterRestauranteUseCase(OurFoodDbContext db, IS3Service s3Service) : IRegisterRestauranteUseCase
 {
-    public ResponseRestaurante Execute(RequestRestaurante request, IFormFile? imagemFile)
+    public async Task<ResponseRestaurante> Execute(RequestRestaurante request, IFormFile? imagemFile)
     {
         string? caminhoImagem = null;
         if (imagemFile != null && imagemFile.Length > 0)
         {
-            caminhoImagem = SalvarImagem(imagemFile);
+            caminhoImagem = await s3Service.UploadFileAsync(imagemFile, "restaurantes");
         }
 
         var entity = new Entities.Restaurante
@@ -34,19 +35,7 @@ public class RegisterRestauranteUseCase(OurFoodDbContext db) : IRegisterRestaura
         return new ResponseRestaurante(
             entity.Id,
             entity.Nome,
-            entity.Imagem
+            !string.IsNullOrEmpty(entity.Imagem) ? s3Service.GetFileUrl(entity.Imagem) : entity.Imagem
         );
-    }
-
-    private string SalvarImagem(IFormFile file)
-    {
-        var pasta = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "imagens", "restaurantes");
-        if (!Directory.Exists(pasta)) Directory.CreateDirectory(pasta);
-        var extensao = Path.GetExtension(file.FileName);
-        var nomeArquivo = Guid.NewGuid() + extensao;
-        var caminho = Path.Combine(pasta, nomeArquivo);
-        using var stream = new FileStream(caminho, FileMode.Create);
-        file.CopyTo(stream);
-        return Path.Combine("imagens", "restaurantes", nomeArquivo).Replace("\\", "/");
     }
 }

@@ -41,9 +41,9 @@ public class CategoriaController(
     [ProducesResponseType(typeof(ResponseCategoria), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public IActionResult Update(int id, [FromForm] RequestUpdateCategoria request, IFormFile? imagem)
+    public async Task<IActionResult> Update(int id, [FromForm] RequestUpdateCategoria request, IFormFile? imagem)
     {
-        var (response, error) = updateCategoriaUseCase.Execute(id, request, imagem);
+        var (response, error) = await updateCategoriaUseCase.Execute(id, request, imagem);
         if (error != null) return BadRequest(error);
         if (response == null) return NotFound("Categoria não encontrada");
         return Ok(response);

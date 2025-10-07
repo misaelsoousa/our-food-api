@@ -29,9 +29,9 @@ public class RestaurantesController(
     [HttpPost]
     [ProducesResponseType(typeof(ResponseRestaurante), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public IActionResult Create([FromForm] RequestRestaurante request, IFormFile? imagem)
+    public async Task<IActionResult> Create([FromForm] RequestRestaurante request, IFormFile? imagem)
     {
-        var response = registerRestauranteUseCase.Execute(request, imagem);
+        var response = await registerRestauranteUseCase.Execute(request, imagem);
         return Created(string.Empty, response);
     }
 
@@ -39,9 +39,9 @@ public class RestaurantesController(
     [ProducesResponseType(typeof(ResponseRestaurante), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public IActionResult Update(int id, [FromForm] RequestUpdateRestaurante request, IFormFile? imagem)
+    public async Task<IActionResult> Update(int id, [FromForm] RequestUpdateRestaurante request, IFormFile? imagem)
     {
-        var (response, error) = updateRestauranteUseCase.Execute(id, request, imagem);
+        var (response, error) = await updateRestauranteUseCase.Execute(id, request, imagem);
         if (error != null) return BadRequest(error);
         if (response == null) return NotFound("Restaurante não encontrado");
         return Ok(response);

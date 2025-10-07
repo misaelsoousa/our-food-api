@@ -11,17 +11,17 @@ namespace OurFood.Api.UseCases.Categoria;
 
 public interface IRegisterCategoriaUseCase
 {
-    ResponseCategoria Execute(RequestCategoria request, Microsoft.AspNetCore.Http.IFormFile imagemFile);
+    Task<ResponseCategoria> Execute(RequestCategoria request, Microsoft.AspNetCore.Http.IFormFile imagemFile);
 }
 
 public class RegisterCategoriaUseCase(OurFoodDbContext db, IS3Service s3Service) : IRegisterCategoriaUseCase
 {
-    public ResponseCategoria Execute(RequestCategoria request, IFormFile? imagemFile)
+    public async Task<ResponseCategoria> Execute(RequestCategoria request, IFormFile? imagemFile)
     {
         string? caminhoDoArquivo = null;
         if (imagemFile != null && imagemFile.Length > 0)
         {
-            caminhoDoArquivo = s3Service.UploadFileAsync(imagemFile, "categorias").Result;
+            caminhoDoArquivo = await s3Service.UploadFileAsync(imagemFile, "categorias");
         }
 
         var entity = new Entities.Categoria

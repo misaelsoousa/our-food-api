@@ -30,10 +30,10 @@ public class CategoriaController(
     [HttpPost]
     [ProducesResponseType(typeof(ResponseCategoria), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public IActionResult Register([FromForm] RequestCategoria request, IFormFile? imagem)
+    public async Task<IActionResult> Register([FromForm] RequestCategoria request, IFormFile? imagem)
     {
         if (imagem == null) return BadRequest("Imagem obrigatória");
-        var response = registerCategoriaUseCase.Execute(request, imagem);
+        var response = await registerCategoriaUseCase.Execute(request, imagem);
         return Created(string.Empty, response);
     }
 

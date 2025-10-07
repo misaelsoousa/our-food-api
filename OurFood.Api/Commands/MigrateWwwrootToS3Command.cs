@@ -36,14 +36,18 @@ public class MigrateWwwrootToS3Command
         Console.WriteLine("Migrando imagens de categorias...");
         
         var categorias = _dbContext.Categorias.ToList();
+        Console.WriteLine($"Encontradas {categorias.Count} categorias no banco");
         
         foreach (var categoria in categorias)
         {
+            Console.WriteLine($"Verificando categoria: {categoria.Nome} - Imagem: {categoria.Imagem}");
+            
             if (!string.IsNullOrEmpty(categoria.Imagem) && 
                 categoria.Imagem.StartsWith("imagens/categorias/") &&
                 !categoria.Imagem.StartsWith("https://"))
             {
                 var localPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", categoria.Imagem);
+                Console.WriteLine($"Arquivo local encontrado: {localPath}");
                 
                 if (File.Exists(localPath))
                 {
@@ -129,9 +133,12 @@ public class MigrateWwwrootToS3Command
         Console.WriteLine("Migrando imagens de restaurantes...");
         
         var restaurantes = _dbContext.Restaurantes.ToList();
+        Console.WriteLine($"Encontrados {restaurantes.Count} restaurantes no banco");
         
         foreach (var restaurante in restaurantes)
         {
+            Console.WriteLine($"Verificando restaurante: {restaurante.Nome} - Imagem: {restaurante.Imagem}");
+            
             if (!string.IsNullOrEmpty(restaurante.Imagem) && 
                 restaurante.Imagem.StartsWith("imagens/restaurantes/") &&
                 !restaurante.Imagem.StartsWith("https://"))

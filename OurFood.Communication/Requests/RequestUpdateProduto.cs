@@ -18,3 +18,4 @@ public record RequestUpdateProduto(
     [Required(ErrorMessage = "RestauranteId é obrigatório")]
     int RestauranteId
 );
+

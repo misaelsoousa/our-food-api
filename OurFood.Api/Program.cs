@@ -10,6 +10,11 @@ using Microsoft.Extensions.DependencyInjection;
 
 using OurFood.Api.Infrastructure;
 
+using Amazon.S3;
+
+using OurFood.Api.Services;
+using OurFood.Api.Commands;
+
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -69,6 +74,25 @@ ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("OurFoodDb"))
 ));
 
 
+
+// AWS S3 Configuration
+builder.Services.AddSingleton<IAmazonS3>(provider =>
+{
+    var config = builder.Configuration;
+    var awsConfig = new Amazon.S3.AmazonS3Config
+    {
+        RegionEndpoint = Amazon.RegionEndpoint.GetBySystemName(config["AWS:Region"]),
+        ServiceURL = $"https://s3.{config["AWS:Region"]}.amazonaws.com"
+    };
+    
+    return new Amazon.S3.AmazonS3Client(
+        Environment.GetEnvironmentVariable("AWS_ACCESS_KEY_ID") ?? config["AWS:AccessKeyId"],
+        Environment.GetEnvironmentVariable("AWS_SECRET_ACCESS_KEY") ?? config["AWS:SecretAccessKey"],
+        awsConfig
+    );
+});
+
+builder.Services.AddScoped<IS3Service, S3Service>();
 
 builder.Services.AddUseCases();
 
@@ -160,6 +184,18 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-
+// Verificar se deve executar migração de imagens
+var commandLineArgs = Environment.GetCommandLineArgs();
+if (commandLineArgs.Contains("--migrate-images"))
+{
+    using var scope = app.Services.CreateScope();
+    var migrateCommand = new MigrateImagesCommand(
+        scope.ServiceProvider.GetRequiredService<OurFoodDbContext>(),
+        scope.ServiceProvider.GetRequiredService<IS3Service>()
+    );
+    
+    await migrateCommand.ExecuteAsync();
+    return;
+}
 
 app.Run();

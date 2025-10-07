@@ -17,3 +17,4 @@ WHERE TABLE_NAME = 'produtos' AND COLUMN_NAME = 'restaurante_id';
 
 -- 5. Verificar alguns produtos
 SELECT id, nome, restaurante_id FROM produtos LIMIT 5;
+

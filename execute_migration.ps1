@@ -36,3 +36,4 @@ try {
     Write-Host "2. O banco de dados 'ourfood' existe"
     Write-Host "3. As credenciais estão corretas"
 }
+

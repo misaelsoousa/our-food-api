@@ -17,3 +17,4 @@ public record RequestUpdatePedido(
     
     decimal? ValorFinal
 );
+

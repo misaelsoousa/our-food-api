@@ -45,9 +45,9 @@ public class ProdutosController(
     [HttpPost]
     [ProducesResponseType(typeof(ResponseProduto), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public IActionResult Create([FromForm] RequestProduto request, IFormFile? imagem)
+    public async Task<IActionResult> Create([FromForm] RequestProduto request, IFormFile? imagem)
     {
-        var (response, error) = registerProdutoUseCase.Execute(request, imagem);
+        var (response, error) = await registerProdutoUseCase.Execute(request, imagem);
         if (error != null) return BadRequest(error);
         return Created(string.Empty, response);
     }

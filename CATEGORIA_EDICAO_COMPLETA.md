@@ -125,3 +125,4 @@ Content-Type: multipart/form-data
 - ✅ Nome (obrigatório)
 - ✅ CorHex (obrigatório) 
 - ✅ Imagem (opcional)
+

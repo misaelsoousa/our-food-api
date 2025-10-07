@@ -49,3 +49,4 @@ Após executar a migração, teste:
 
 ## Arquivo de Migração
 - `migrate_aws.sql` - Script SQL para executar no banco AWS
+

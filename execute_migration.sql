@@ -21,3 +21,4 @@ WHERE TABLE_NAME = 'produtos'
 AND COLUMN_NAME = 'restaurante_id';
 
 
+

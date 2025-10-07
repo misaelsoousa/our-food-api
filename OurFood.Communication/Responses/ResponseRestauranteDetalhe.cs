@@ -11,3 +11,5 @@ public record ResponseRestauranteDetalhe(int Id, string Nome, string? Imagem, Li
 
 
 
+
+

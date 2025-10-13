@@ -39,3 +39,4 @@ public class UpdateRestauranteImagemUseCase(OurFoodDbContext db, IS3Service s3Se
         }
     }
 }
+

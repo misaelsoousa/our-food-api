@@ -18,13 +18,10 @@ public class GetRestauranteDetalhe(OurFoodDbContext db, IS3Service s3Service) : 
         var restaurante = db.Restaurantes.FirstOrDefault(r => r.Id == restauranteId);
         if (restaurante == null) return (null, "Restaurante não encontrado");
 
-        var produtos = db.RestaurantesProdutos
-            .Where(rp => rp.RestauranteId == restauranteId)
-            .Include(rp => rp.Produto)
-            .ThenInclude(p => p.Categoria)
-            .Include(rp => rp.Produto)
-            .ThenInclude(p => p.Restaurante)
-            .Select(rp => rp.Produto)
+        var produtos = db.Produtos
+            .Where(p => p.RestauranteId == restauranteId)
+            .Include(p => p.Categoria)
+            .Include(p => p.Restaurante)
             .ToList();
 
         var produtosList = produtos.Select(p => new ResponseProduto(

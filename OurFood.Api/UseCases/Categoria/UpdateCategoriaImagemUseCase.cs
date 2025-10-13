@@ -39,3 +39,4 @@ public class UpdateCategoriaImagemUseCase(OurFoodDbContext db, IS3Service s3Serv
         }
     }
 }
+

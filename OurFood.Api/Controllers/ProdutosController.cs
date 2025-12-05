@@ -57,9 +57,9 @@ public class ProdutosController(
     [ProducesResponseType(typeof(ResponseProduto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public IActionResult Update(int id, [FromForm] RequestUpdateProduto request, IFormFile? imagem)
+    public async Task<IActionResult> Update(int id, [FromForm] RequestUpdateProduto request, IFormFile? imagem)
     {
-        var (response, error) = updateProdutoUseCase.Execute(id, request, imagem);
+        var (response, error) = await updateProdutoUseCase.Execute(id, request, imagem);
         if (error != null) return BadRequest(error);
         if (response == null) return NotFound("Produto não encontrado");
         return Ok(response);

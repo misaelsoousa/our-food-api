@@ -10,7 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 using OurFood.Api.Infrastructure;
 
-// using Amazon.S3; // Comentado - descomente se voltar a usar S3
+using Amazon.S3; 
 
 using OurFood.Api.Services;
 
@@ -74,17 +74,16 @@ ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("OurFoodDb"))
 
 
 
-// AWS S3 Configuration - COMENTADO - Para usar S3 novamente, descomente e comente a linha do LocalFileService abaixo
-/*
+
+
 builder.Services.AddSingleton<IAmazonS3>(provider =>
 {
     var config = builder.Configuration;
-    var awsConfig = new Amazon.S3.AmazonS3Config
+    var awsConfig = new AmazonS3Config
     {
-        RegionEndpoint = Amazon.RegionEndpoint.GetBySystemName(config["AWS:Region"]),
-        ServiceURL = $"https://s3.{config["AWS:Region"]}.amazonaws.com"
+        RegionEndpoint = Amazon.RegionEndpoint.GetBySystemName(config["AWS:Region"])
     };
-    
+
     return new Amazon.S3.AmazonS3Client(
         Environment.GetEnvironmentVariable("AWS_ACCESS_KEY_ID") ?? config["AWS:AccessKeyId"],
         Environment.GetEnvironmentVariable("AWS_SECRET_ACCESS_KEY") ?? config["AWS:SecretAccessKey"],
@@ -93,10 +92,7 @@ builder.Services.AddSingleton<IAmazonS3>(provider =>
 });
 
 builder.Services.AddScoped<IS3Service, S3Service>();
-*/
 
-// Armazenamento local de arquivos
-builder.Services.AddScoped<IS3Service, LocalFileService>();
 
 builder.Services.AddUseCases();
 

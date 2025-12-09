@@ -1,5 +1,4 @@
-// CÓDIGO S3 COMENTADO - Para uso futuro, descomente e configure no Program.cs
-/*
+
 using Amazon.S3;
 using Amazon.S3.Model;
 using Microsoft.AspNetCore.Http;
@@ -73,4 +72,3 @@ public class S3Service : IS3Service
         return $"https://{_bucketName}.s3.{region}.amazonaws.com/{key}";
     }
 }
-*/

@@ -25,7 +25,7 @@ public static class DependencyInjection
         services.AddScoped<IDeleteCategoriaUseCase, DeleteCategoriaUseCase>();
         // Produto
         services.AddScoped<IGetAllProdutos, GetAllProdutos>();
-        services.AddScoped<IRegisterProdutoUseCase, RegisterProdutoUseCase>();
+        services.AddScoped<IRegisterProdutoUseCase, RegisterProdutoUseCase>();  
         services.AddScoped<IUpdateProdutoUseCase, UpdateProdutoUseCase>();
         services.AddScoped<IUpdateProdutoImagemUseCase, UpdateProdutoImagemUseCase>();
         services.AddScoped<IDeleteProdutoUseCase, DeleteProdutoUseCase>();

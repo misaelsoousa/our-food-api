@@ -45,8 +45,7 @@ public class AuthController(ILoginUseCase loginUseCase, IRegisterUsuarioUseCase 
     {
         try
         {
-            var token = GenerateToken(0);
-            var response = registerUsuarioUseCase.Execute(request, token);
+            var response = registerUsuarioUseCase.Execute(request, GenerateToken);
             return Created(string.Empty, response);
         }
         catch (Exception ex)

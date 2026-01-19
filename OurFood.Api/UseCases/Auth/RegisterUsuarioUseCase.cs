@@ -10,12 +10,12 @@ namespace OurFood.Api.UseCases.Auth;
 
 public interface IRegisterUsuarioUseCase
 {
-    ResponseAuth Execute(RequestAuth request, string token);
+    ResponseAuth Execute(RequestAuth request, Func<int, string> generateToken);
 }
 
 public class RegisterUsuarioUseCase(OurFoodDbContext db) : IRegisterUsuarioUseCase
 {
-    public ResponseAuth Execute(RequestAuth request, string token)
+    public ResponseAuth Execute(RequestAuth request, Func<int, string> generateToken)
     {
         if (db.Usuarios.Any(u => u.Email == request.Email))
         {
@@ -29,6 +29,8 @@ public class RegisterUsuarioUseCase(OurFoodDbContext db) : IRegisterUsuarioUseCa
         };
         db.Usuarios.Add(usuario);
         db.SaveChanges();
+
+        var token = generateToken(usuario.Id);
         return new ResponseAuth(Token: token);
     }
 }
